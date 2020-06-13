@@ -2,7 +2,7 @@
   "name": "example",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "debug": "ndb server.js",
     "start": "node server.js"

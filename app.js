@@ -53,6 +53,7 @@ const data = validatorInfo.map((x) => {
         stashId: x.stashId,
         name: name,
         riskscore: rs[0].riskScore,
+        numOfNominators: x.noOfNominators,
         rewardsPer100KSM: rewardsPer100KSM,
     };
 });
@@ -89,13 +90,13 @@ function sortMedRisk(arr) {
 const lowRiskSortArr = sortLowRisk(sortedData);
 const medRiskSortArr = sortMedRisk(sortedData);
 
-app.get("/maxyieldset", (req, res) => {
+app.get("/rewards/max-set", (req, res) => {
     try {
         if (!(sortedData.length > 0)) {
             res.json([]);
             return;
         }
-        console.log(sortedData);
+        // console.log(sortedData);
         const result = sortedData
             .slice(0, 16)
             .map(
@@ -120,7 +121,7 @@ app.get("/maxyieldset", (req, res) => {
     }
 });
 
-app.get("/yieldwithrisk", (req, res) => {
+app.get("/rewards/risk-set", (req, res) => {
     try {
         if (!(sortedData.length > 0)) {
             res.json([]);
@@ -138,6 +139,37 @@ app.get("/yieldwithrisk", (req, res) => {
             { highriskset: highriskset },
             { totalset: sortedData },
         ];
+        res.json(result);
+    } catch (err) {
+        res.status(400).send({ error: "Error", err: err });
+    }
+});
+
+app.get("/validators", (req, res) => {
+    try {
+        if (!(sortedData.length > 0)) {
+            res.json([]);
+            return;
+        }
+        // console.log(sortedData);
+        const result = sortedData.map(
+            ({
+                stashId,
+                name,
+                commission,
+                totalStake,
+                estimatedPoolReward,
+                numOfNominators,
+            }) => ({
+                stashId,
+                name,
+                commission,
+                totalStake,
+                estimatedPoolReward,
+                numOfNominators,
+            })
+        );
+        // console.log(result)
         res.json(result);
     } catch (err) {
         res.status(400).send({ error: "Error", err: err });
